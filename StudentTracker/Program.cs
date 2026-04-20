@@ -12,10 +12,9 @@ namespace StudentTracker
         [STAThread]
         static void Main()
         {
-            // Налаштування конфігурації для сучасних версій .NET
+          
             ApplicationConfiguration.Initialize();
 
-            // Запускаємо нашу головну форму
             Application.Run(new MainForm());
         }
     }
