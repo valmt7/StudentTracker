@@ -15,11 +15,7 @@ namespace StudentTracker
         {
             InitializeComponent();
             _taskRepository = new TaskRepository();
-
-            // Початкові дані
-            _taskRepository.Add(new TaskItem(1, 1, "Практична 1", "Зробити UML", DateTime.Now.AddDays(2)));
-            _taskRepository.Add(new TaskItem(2, 2, "РГР", "Вивчити граф", DateTime.Now.AddDays(5)));
-
+     
             DrawInterface();
             RefreshGrid();
         }

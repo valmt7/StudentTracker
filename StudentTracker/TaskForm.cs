@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -69,16 +70,30 @@ namespace StudentTracker
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtTitle.Text))
+            
+            var tempTask = new TaskItem(_taskId, _subjectId, txtTitle.Text, txtDescription.Text, dtpDueDate.Value);
+            tempTask.ChangeStatus((TaskStatus)cmbStatus.SelectedIndex);
+
+            
+            var context = new ValidationContext(tempTask, serviceProvider: null, items: null);
+            var results = new List<ValidationResult>();
+
+           
+            bool isValid = Validator.TryValidateObject(tempTask, context, results, true);
+
+            if (!isValid)
             {
-                MessageBox.Show("Введіть назву завдання!", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                
+                string errorMessages = string.Join("\n• ", results.Select(r => r.ErrorMessage));
+
+                
+                MessageBox.Show("Будь ласка, виправте наступні помилки:\n\n• " + errorMessages,
+                                "Помилка валідації", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             
-            ResultTask = new TaskItem(_taskId, _subjectId, txtTitle.Text, txtDescription.Text, dtpDueDate.Value);
-            ResultTask.ChangeStatus((TaskStatus)cmbStatus.SelectedIndex);
-
+            ResultTask = tempTask;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
